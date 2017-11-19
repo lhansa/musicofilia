@@ -63,7 +63,7 @@ notes <- c("C2",
 
 #Table of frequencies
 frequencies <- data_frame(n=-33:14) %>% 
-  mutate(frequency = round(freq(n),4),
+  mutate(frequency = freq(n),
          note = notes,
          code = c(letters, toupper(letters))[1:48])
 
@@ -183,12 +183,6 @@ while(maxfitenss_iter < maxfitness & iter < maxiter){
 results %>% 
   slice(120) %>% 
   pull(best_melody) %>% 
-  str_split(pattern = "") %>% 
-  flatten_chr() %>% 
-  data_frame() %>% 
-  set_names("code") %>% 
-  left_join(frequencies, by = "code") %>% 
-  pull(frequency) %>% 
-  map(function(f) sine(f, duration = 10000)) %>% 
-  reduce(bind) %>% 
-  writeWave("tmp/resultadoChinchon.wav")
+  genera_onda(0.25,"tmp/resultadoChinchon.wav")
+
+genera_onda(prelude, 0.25)
