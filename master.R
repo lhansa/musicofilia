@@ -3,7 +3,20 @@ rm(list=ls()); gc()
 library(tidyverse)
 library(tuneR)
 
+## Funciones ------------------------------------------
+
 walk(list.files("src",pattern = ".R", full.names = TRUE), source)
+
+calcula_frecuencia <- function(int,vb) interval(int, tuning = "pythagorean") * vb
+
+genera_onda <- function(f, t){
+  
+  if(length(f) == 0) return(silence(duration = t, xunit = "time"))
+  
+  return(sine(freq = f, duration = t, xunit = "time"))
+}
+
+## Inicializaciones -------------------------------------------------
 
 # sudo apt-get install sox
 setWavPlayer("/usr/bin/play")
@@ -33,14 +46,6 @@ escala_menor %>%
 
 ## Sarabanda -----------------------------------------------------------
 
-calcula_frecuencia <- function(int,vb) interval(int, tuning = "pythagorean") * vb
-
-genera_onda <- function(f, t){
-  
-  if(length(f) == 0) return(silence(duration = t, xunit = "time"))
-
-  return(sine(freq = f, duration = t, xunit = "time"))
-}
 
 gorgorito <- c("perfect-fifth", "octave", "major-seventh", "octave", 
                "major-second", "minor-third", "major-second", 
@@ -55,7 +60,6 @@ tiempos <- c(rep(0.5,4),
              0.5,1,0.5,
              0.5, 1, 0.1, 1.0)
 
-
 gorgorito %>% 
   map2(.y = vbase,
        .f = calcula_frecuencia) %>% 
@@ -63,5 +67,20 @@ gorgorito %>%
        .f = genera_onda) %>% 
   reduce(bind) %>% 
   play()
+
+## Creación aleatoria ------------------------------------------------
+
+intervalos <- c('unison', 'minor-second', 'major-second' ,
+     'minor-third', 'major-third', 'perfect-fourth',
+     'diminished-fifth', 'perfect-fifth', 'minor-sixth',
+     'major-sixth','minor-seventh', 'major-seventh', 'octave')
+
+set.seed(1)
+sample(intervalos,size = 20, replace = TRUE) %>% 
+  map2(440, calcula_frecuencia) %>% 
+  map2(0.5, genera_onda) %>% 
+  reduce(bind) %>% 
+  play()
+  
   
 
