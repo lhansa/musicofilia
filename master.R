@@ -3,6 +3,8 @@ rm(list=ls()); gc()
 library(tidyverse)
 library(tuneR)
 
+# ? readWave
+
 ## Funciones ------------------------------------------
 
 walk(list.files("src",pattern = ".R", full.names = TRUE), source)
