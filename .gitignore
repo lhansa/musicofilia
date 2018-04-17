@@ -3,5 +3,4 @@
 .RData
 .Ruserdata
 tmp
-.wav
-Kurzweil-K2000-Dual-Bass-C1.wav
+*.wav
